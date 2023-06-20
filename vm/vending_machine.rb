@@ -18,6 +18,10 @@ class VendingMachine
     @sales = 0
   end
 
+  def inform_drink_types
+    @drinks
+  end
+
   # 投入金額の総計を取得できる。
   def current_slot_money
     # 自動販売機に入っているお金を表示する
@@ -47,7 +51,7 @@ class VendingMachine
 # ステップ3　購入
   def sell(drinks)
     case drinks
-    when cola  
+    when :cola  
       #在庫が0の場合
       if @cola[:stock] == 0 
         puts "売り切れ"
@@ -60,9 +64,12 @@ class VendingMachine
         @cola[:stock] -= 1
         @sales += @cola[:price]
         @slot_money -= @cola[:price]
+        puts "#{@slot_money}円のお釣りです"
+        # 自動販売機に入っているお金を0円に戻す
+        @slot_money = 0
         return @cola[:name]  # 追記
       end
-    when water  
+    when :water  
       if @water[:stock] == 0 
         puts "売り切れ"
       elsif  @water[:price] > @slot_money
@@ -71,9 +78,12 @@ class VendingMachine
         @water[:stock] -= 1
         @sales += @water[:price]
         @slot_money -= @water[:price]
+        puts "#{@slot_money}円のお釣りです"
+        # 自動販売機に入っているお金を0円に戻す
+        @slot_money = 0
         return @water[:name]  # 追記
       end
-    when red_bull  
+    when :red_bull  
       if @red_bull[:stock] == 0 
         puts "売り切れ"
       elsif  @red_bull[:price] > @slot_money
@@ -82,6 +92,9 @@ class VendingMachine
         @red_bull[:stock] -= 1
         @sales += @red_bull[:price]
         @slot_money -= @red_bull[:price]
+        puts "#{@slot_money}円のお釣りです"
+        # 自動販売機に入っているお金を0円に戻す
+        @slot_money = 0
         return @red_bull[:name]  # 追記
       end
     else
@@ -95,7 +108,7 @@ class VendingMachine
   end
 
 # ステップ４　投入金額、在庫の点で購入可能なドリンクのリストを取得
-  def inform
+  def inform_buyable_drinksgit
     buyable_drinks = @drinks.map do |drink|
       if (drink[:price] < @slot_money) && (drink[:stock] > 0)
         "#{drink[:name]}"
